@@ -22,3 +22,18 @@ echo "Archivo: $LOGFILE"
 echo "Entradas: $(wc -l < "$LOGFILE")"
 echo "=============================="
 echo ""
+
+# [1/5] Top 10 direcciones IP
+echo "-------------------------"
+# Extraer la columna de IP (campo 2, separador |)
+# Ordenar, contar y mostrar las 10 más frecuentes
+cut -d '|' -f2 "$LOGFILE" | \
+    tr -d '' | \
+    sort | \
+    uniq -c | \
+    sort -rn | \
+    head -10 | \
+    awk '{print " %5d solcitudes -> %s\n", $1, $2}'
+echo ""
+
+
