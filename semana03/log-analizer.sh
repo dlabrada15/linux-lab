@@ -36,4 +36,23 @@ cut -d '|' -f2 "$LOGFILE" | \
     awk '{print " %5d solcitudes -> %s\n", $1, $2}'
 echo ""
 
+# [2/5] Distribucion por severidad
+echo "[2/5] DISTRIBUCION POR SEVERIDAD"
+echo "------------------------------"
 
+TOTAL=$(wc -l < "$LOGFILE")
+
+for nivel in FATAL ERROR WARNING INFO; do
+
+COUNT=$(grep -c "| $nivel |" "$LOGFILE" 2>/dev/null || echo 0)
+
+PCT=0
+if [ "$TOTAL" -gt 0 ]; then
+    PCT=$(awk "BEGIN { printf \"%.1f\", ($COUNT / $TOTAL) * 100 }")
+fi
+
+printf "%-10s %4d entradas (%5s%%)\n" "$nivel" "$COUNT" "$PCT"
+
+done
+
+echo ""
