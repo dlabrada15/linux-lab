@@ -57,6 +57,6 @@ for i in {1..4}; do
 done
 
 echo "     50 archivos creados exitosamente"
-echo "Archivos totales: $(ls -1 | wc -1)"
+echo "Archivos totales: $(ls -1 | wc -l)"
 
 
