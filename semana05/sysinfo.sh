@@ -71,10 +71,6 @@ printf "REPORTE DEL SISTEMA - sysinfo.sh v%s\n" "$VERSION"
 echo "$SEPARADOR"
 echo ""
 
-# === Ejecutar según el modo ===
-if [ "$MODO" = "all" ]; then
-    seccion_general
-fi
 # === Sección 2: CPU ===
 seccion_cpu() {
     echo "[ CPU ]"
@@ -104,6 +100,16 @@ seccion_memoria() {
     printf "%-18s %s\n" "Swap usado:" "$swap_usado"
     echo ""
 }
+# === Sección 4: Disco ===
+seccion_disco() {
+    echo "[ USO DE DISCO ]"
+    echo "$SEPARADOR_SEC"
+    printf "%-20s %6s %6s %6s %5s\n" "Partición" "Total" "Usado" "Libre" "Uso%"
+    echo "$(printf '%.0s-' {1..48})"
+    df -h | grep -v "^tmpfs\|^udev\|^Filesystem" | \
+    awk '{ printf "%-20s %6s %6s %6s %5s\n", $6, $2, $3, $4, $5 }'
+    echo ""
+}
 
 # === Ejecutar según el modo ===
 case "$MODO" in
@@ -111,7 +117,9 @@ case "$MODO" in
         seccion_general
         seccion_cpu
         seccion_memoria
+        seccion_disco
         ;;
     cpu) seccion_cpu ;;
     mem) seccion_memoria ;;
+    disk) seccion_disco ;;
 esac
