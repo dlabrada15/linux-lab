@@ -6,20 +6,6 @@
 # Sin argumentos muestra el reporte completo.
 # Con --seccion muestra solo esa sección.
 
-# === Sección 1: Información general ===
-seccion_general() {
-    echo "[ INFORMACION DEL SISTEMA ]"
-    echo "$SEPARADOR_SEC"
-    printf "%-18s %s\n" "Hostname:" "$(hostname)"
-    printf "%-18s %s\n" "Usuario:" "$USER"
-    printf "%-18s %s\n" "Sistema:" "$(uname -s)"
-    printf "%-18s %s\n" "Kernel:" "$(uname -r)"
-    printf "%-18s %s\n" "Arquitectura:" "$(uname -m)"
-    printf "%-18s %s\n" "Fecha / Hora:" "$(date '+%d/%m/%Y %H:%M:%S')"
-    printf "%-18s %s\n" "Encendido:" "$(uptime -p)"
-    echo ""
-}
-
 # === Constantes ===
 readonly VERSION="1.0.0"
 readonly SEPARADOR="========================================"
@@ -69,7 +55,21 @@ esac
 echo "$SEPARADOR"
 printf "REPORTE DEL SISTEMA - sysinfo.sh v%s\n" "$VERSION"
 echo "$SEPARADOR"
-echo ""
+echo "" 
+
+# === Sección 1: Información general ===
+seccion_general() {
+    echo "[ INFORMACION DEL SISTEMA ]"
+    echo "$SEPARADOR_SEC"
+    printf "%-18s %s\n" "Hostname:" "$(hostname)"
+    printf "%-18s %s\n" "Usuario:" "$USER"
+    printf "%-18s %s\n" "Sistema:" "$(uname -s)"
+    printf "%-18s %s\n" "Kernel:" "$(uname -r)"
+    printf "%-18s %s\n" "Arquitectura:" "$(uname -m)"
+    printf "%-18s %s\n" "Fecha / Hora:" "$(date '+%d/%m/%Y %H:%M:%S')"
+    printf "%-18s %s\n" "Encendido:" "$(uptime -p)"
+    echo ""
+}
 
 # === Sección 2: CPU ===
 seccion_cpu() {
@@ -111,6 +111,24 @@ seccion_disco() {
     echo ""
 }
 
+# === Sección 5: Procesos ===
+seccion_procesos() {
+    echo "[ PROCESOS ]"
+    echo "$SEPARADOR_SEC"
+    total_proc=$(ps aux --no-headers | wc -l)
+    mis_proc=$(ps -u "$USER" --no-headers 2>/dev/null | wc -l)
+
+    printf "%-20s %s\n" "Total en sistema:" "$total_proc"
+    printf "%-20s %s\n" "De $USER:" "$mis_proc"
+    echo ""
+    echo "Top 5 por consumo de CPU:"
+    printf "%-8s %-5s %-5s %s\n" "PID" "%CPU" "%MEM" "COMANDO"
+    echo "$(printf '%.0s-' {1..40})"
+    ps aux --sort=-%cpu --no-headers | head -5 | \
+    awk '{ printf "%-8s %-5s %-5s %s\n", $2, $3, $4, $11 }'
+    echo ""
+}
+
 # === Ejecutar según el modo ===
 case "$MODO" in
     all)
@@ -118,8 +136,10 @@ case "$MODO" in
         seccion_cpu
         seccion_memoria
         seccion_disco
+        seccion_procesos
         ;;
     cpu) seccion_cpu ;;
     mem) seccion_memoria ;;
     disk) seccion_disco ;;
+    proc) seccion_procesos ;;
 esac
