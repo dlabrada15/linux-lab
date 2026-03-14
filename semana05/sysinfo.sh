@@ -6,6 +6,20 @@
 # Sin argumentos muestra el reporte completo.
 # Con --seccion muestra solo esa sección.
 
+# === Sección 1: Información general ===
+seccion_general() {
+    echo "[ INFORMACION DEL SISTEMA ]"
+    echo "$SEPARADOR_SEC"
+    printf "%-18s %s\n" "Hostname:" "$(hostname)"
+    printf "%-18s %s\n" "Usuario:" "$USER"
+    printf "%-18s %s\n" "Sistema:" "$(uname -s)"
+    printf "%-18s %s\n" "Kernel:" "$(uname -r)"
+    printf "%-18s %s\n" "Arquitectura:" "$(uname -m)"
+    printf "%-18s %s\n" "Fecha / Hora:" "$(date '+%d/%m/%Y %H:%M:%S')"
+    printf "%-18s %s\n" "Encendido:" "$(uptime -p)"
+    echo ""
+}
+
 # === Constantes ===
 readonly VERSION="1.0.0"
 readonly SEPARADOR="========================================"
@@ -56,3 +70,8 @@ echo "$SEPARADOR"
 printf "REPORTE DEL SISTEMA - sysinfo.sh v%s\n" "$VERSION"
 echo "$SEPARADOR"
 echo ""
+
+# === Ejecutar según el modo ===
+if [ "$MODO" = "all" ]; then
+    seccion_general
+fi
