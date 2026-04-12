@@ -1,15 +1,26 @@
-# --- 4. Matriz de resumen por semana ---
-mapfile -t semanas < <(ls -d "$REPO"/semana*/ 2>/dev/null | sort)
-COLS=3 # scripts, docs, tamano_kb
-COLS=3 # scripts, docs, tamano_kb
-declare -a matriz_sem
+# --- 5. Mostrar resultados ---
+echo ""
+echo "=== ARCHIVOS POR EXTENSION ==="
+{
+echo "EXTENSION ARCHIVOS TAMANO_KB"
+for ext in $(printf '%s\n' "${!conteo[@]}" | sort); do
+kb=$(( ${tamano_ext["$ext"]:-0} / 1024 ))
+echo "$ext ${conteo[$ext]} $kb"
+done
+} | column -t
+
+echo ""
+echo "=== RESUMEN POR SEMANA ==="
+printf "%-12s %-4s %-4s %-10s %-8s\n" \
+"SEMANA" "SH" "MD" "SIZE_KB" "README"
+
+printf "%s\n" "----------------------------------------------"
 for (( i=0; i<${#semanas[@]}; i++ )); do
-dir="${semanas[$i]}"
-scripts=$(find "$dir" -name "*.sh" | wc -l)
-scripts=$(find "$dir" -name "*.sh" | wc -l)
-docs=$(find "$dir" -name "*.md" | wc -l)
-kb=$(du -sk "$dir" 2>/dev/null | awk '{ print $1 }')
-matriz_sem[$(( i*COLS + 0 ))]=$scripts
-matriz_sem[$(( i*COLS + 1 ))]=$docs
-matriz_sem[$(( i*COLS + 2 ))]=${kb:-0}
+nombre=$(basename "${semanas[$i]}")
+printf "%-12s %-4s %-4s %-10s %-8s\n" \
+"$nombre" \
+"${matriz_sem[$(( i*COLS + 0 ))]}" \
+"${matriz_sem[$(( i*COLS + 1 ))]}" \
+"${matriz_sem[$(( i*COLS + 2 ))]}" \
+"${tiene_readme[$nombre]:-NO}"
 done
