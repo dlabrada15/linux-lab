@@ -1,26 +1,30 @@
-# --- 5. Mostrar resultados ---
-echo ""
-echo "=== ARCHIVOS POR EXTENSION ==="
+# --- 6. Escribir reporte ---
+REPORTE="${REPO}/semana08/inventario-report.md"
 {
-echo "EXTENSION ARCHIVOS TAMANO_KB"
+echo "# Inventario del Repositorio linux-lab"
+echo ""
+echo "Generado: $(date '+%Y-%m-%d %H:%M:%S')"
+echo ""
+echo "## Total de archivos: ${#archivos[@]}"
+echo ""
+echo "## Archivos por extension"
+echo ""
+echo "| Extension | Archivos | Tamano KB |"
+echo "|-----------|----------|-----------|"
 for ext in $(printf '%s\n' "${!conteo[@]}" | sort); do
 kb=$(( ${tamano_ext["$ext"]:-0} / 1024 ))
-echo "$ext ${conteo[$ext]} $kb"
+echo "| $ext | ${conteo[$ext]} | $kb |"
 done
-} | column -t
-
 echo ""
-echo "=== RESUMEN POR SEMANA ==="
-printf "%-12s %-4s %-4s %-10s %-8s\n" \
-"SEMANA" "SH" "MD" "SIZE_KB" "README"
+echo "## Resumen por semana"
+echo ""
+echo "| Semana | Scripts | Docs | Size KB | README |"
+echo "|--------|---------|------|---------|--------|"
 
-printf "%s\n" "----------------------------------------------"
 for (( i=0; i<${#semanas[@]}; i++ )); do
 nombre=$(basename "${semanas[$i]}")
-printf "%-12s %-4s %-4s %-10s %-8s\n" \
-"$nombre" \
-"${matriz_sem[$(( i*COLS + 0 ))]}" \
-"${matriz_sem[$(( i*COLS + 1 ))]}" \
-"${matriz_sem[$(( i*COLS + 2 ))]}" \
-"${tiene_readme[$nombre]:-NO}"
+echo "| $nombre | ${matriz_sem[$(( i*COLS + 0 ))]} | ${matriz_sem[$(( i*COLS + 1 ))]} | ${matriz_sem[$(( i*COLS + 2 ))]} | ${tiene_readme[$nombre]:-NO} |"
 done
+} > "$REPORTE"
+echo ""
+echo "Reporte guardado en: $REPORTE"
