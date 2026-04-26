@@ -1,0 +1,25 @@
+========================================
+REPORTE DE PROCESOS - 2026-04-25 21:20:37
+Sistema: diana-VirtualBox | Usuario: diana
+========================================
+
+--- Top 5 procesos por CPU ---
+diana    PID:1623   CPU:  7.5% MEM:  4.6% cinnamon
+diana    PID:2529   CPU:  6.3% MEM:  7.5% /usr/lib/firefox/firefox
+root     PID:1118   CPU:  1.9% MEM:  2.8% /usr/lib/xorg/Xorg
+diana    PID:2731   CPU:  1.1% MEM:  2.9% /usr/lib/firefox/firefox-bin
+diana    PID:2733   CPU:  0.6% MEM:  2.2% /usr/lib/firefox/firefox-bin
+
+--- Top 5 procesos por MEM ---
+diana    PID:2529   CPU:  6.3% MEM:  7.5% /usr/lib/firefox/firefox
+diana    PID:1623   CPU:  7.5% MEM:  4.6% cinnamon
+diana    PID:2731   CPU:  1.1% MEM:  2.9% /usr/lib/firefox/firefox-bin
+root     PID:1118   CPU:  1.9% MEM:  2.8% /usr/lib/xorg/Xorg
+diana    PID:2733   CPU:  0.6% MEM:  2.2% /usr/lib/firefox/firefox-bin
+
+--- Procesos zombie ---
+Ninguno detectado
+
+--- Verificando procesos vigilados ---
+[0;32m[2026-04-25 21:20:37] [OK] Proceso 'bash' activo (PID: 1956)[0m
+[0;33m[2026-04-25 21:20:37] [WARNING] Proceso 'sshd' no encontrado[0m
